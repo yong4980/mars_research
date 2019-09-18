@@ -39,22 +39,18 @@ private:
 public:
   Tcp();
   ~Tcp();
-  int BuildServerTCP();
-  int BuildClientTCP(char serverIP[]);
-  void ListeningClient(int newSocketNum);
-  char* ReadMsg(int socketNum, int mode);
-  void WriteMsg(int socketNum, char* msg, int mode);
+  int BuildServerTCP(); //make and bind socket
+  int BuildClientTCP(char serverIP[]); //make socket and connect with server
+  void ListeningClient(int newSocketNum); //waititng clients socket
+  char* ReadMsg(int socketNum, int mode); //read msg
+  void WriteMsg(int socketNum, char* msg, int mode); //send msg
   void WriteMsg(char* socketNumStr, char* msg); //Function overload
-  int FindEmptySocket();
-  void CheckConnectedSocket();
-  int GetMaxClientNum();
-  void QuitTCP();
-  void QuitAll();
-  void close(int socketNum);
-  void DisconnectSocket(int socketNum);
-
-  void setBuffer(char* buffer);
-  char* getBuffer();
+  int FindEmptySocket(); //find empty socekt and return that index
+  void CheckConnectedSocket(); //show connected sockets
+  void QuitTcp(); //release memory, etc..
+  void QuitAll(); //terminate connected clients
+  void close(int socketNum); //close socket
+  void DisconnectSocket(int socketNum); //erase socket info
 };
 
 #endif

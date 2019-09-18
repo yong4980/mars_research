@@ -152,7 +152,7 @@ void Tcp::CheckConnectedSocket(){
   }
 }
 
-void Tcp::QuitTCP(){
+void Tcp::QuitTcp(){
   shmdt(connectedSocket);
   shmctl(shmid,IPC_RMID,NULL);
   delete[] buffer;

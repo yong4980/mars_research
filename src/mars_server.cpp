@@ -105,5 +105,5 @@ void GetString(char* str){
 void EndProcess(char* buffer, char* checkStr, Tcp* serverTcp){
   delete[] buffer;
   delete[] checkStr;
-  serverTcp->QuitTCP();
+  serverTcp->QuitTcp();
 }
