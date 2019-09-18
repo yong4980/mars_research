@@ -88,6 +88,7 @@ void Tcp::ListeningClient(int newSocketNum){
     exit(1);
   }
   printf("[+]Connection accepted from %s:%d\n", inet_ntoa(newClientAddr.sin_addr), ntohs(newClientAddr.sin_port));
+  printf("Success connected %d socket\n", newSocketNum);
 }
 
 char* Tcp::ReadMsg(int socket, int mode){ //read msg

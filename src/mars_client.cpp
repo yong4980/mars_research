@@ -29,6 +29,7 @@ int main(void){
   char* buffer = new char[1024];
   int clientSocket;
   pid_t childpid;
+	fgets(buffer, sizeof(buffer), stdin); //empty input buffer
 
   //IPC(Inter Process Communication) with mars program
 	key_t key = ftok("shmfile", inputKey);
@@ -117,8 +118,6 @@ void UIClient(char serverIP[], int *inputKey){ //get information before start cl
 	scanf("%s", serverIP);
 	printf("Please input Shared memory key --> ");
 	scanf("%d", inputKey);
-	//empty input buffer
-	fgets(buffer, sizeof(buffer), stdin);
 }
 
 void GetString(char* str){ //get input buffer
