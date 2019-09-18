@@ -30,8 +30,7 @@ int main(void){
   int clientSocket;
   pid_t childpid;
 
-	fgets(buffer, sizeof(buffer), stdin); //empty input buffer
-  //IPC
+  //IPC(Inter Process Communication) with mars program
 	key_t key = ftok("shmfile", inputKey);
 	int shmid = shmget(key, 1024, 0666|IPC_CREAT); // shmget returns an identifier in shmid
 	fuzzy_data *shmdat = (fuzzy_data*) shmat(shmid, (void*)0, 0); // shmat to attach to shared memory
@@ -45,7 +44,7 @@ int main(void){
   Tcp clientTcp;
   clientSocket = clientTcp.BuildClientTCP(serverIP);
 
-  if((childpid=fork()) == -1){
+  if((childpid=fork()) == -1){ //check error
     close(clientSocket);
     perror("fork() error\n");
     exit(0);
@@ -107,17 +106,22 @@ void ClientFunction(int clientSocket, char* buffer, Tcp* clientTcp,
 		clientTcp->WriteMsg(clientSocket, buffer, CLIENT);
 		printf("--Done--\n");
 	}
+	// else if(strncmp(checkStr, "FUNCTION NAME", length(FUNCTION NAME)) == 0){
+  //   DO you want
+  // }
 }
 //////////////////////////////////////////////////////////////////////////////////
 
-void UIClient(char serverIP[], int *inputKey){
+void UIClient(char serverIP[], int *inputKey){ //get information before start client service
 	printf("Start Client\nPlease input Server IP --> ");
 	scanf("%s", serverIP);
 	printf("Please input Shared memory key --> ");
 	scanf("%d", inputKey);
+	//empty input buffer
+	fgets(buffer, sizeof(buffer), stdin);
 }
 
-void GetString(char* str){
+void GetString(char* str){ //get input buffer
   bzero(str, sizeof(str));
   fflush(stdin);
   fgets(str,sizeof(str),stdin);

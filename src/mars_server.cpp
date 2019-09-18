@@ -13,12 +13,14 @@ int main(void){
   Tcp serverTcp;
   listeningSocketNum = serverTcp.BuildServerTCP();
 
-  sendpid = fork();
+  sendpid = fork(); //fork send process
+
   while(true){
     int newSocketNum = serverTcp.FindEmptySocket();
     serverTcp.ListeningClient(newSocketNum); //Parent Process, Listening client socket
-    kill(sendpid, SIGINT);
 
+    //if new socket is connected, update send process
+    kill(sendpid, SIGINT);
     if((sendpid=fork()) == -1){//Check error
       serverTcp.close(listeningSocketNum);
       perror("fork() error\n");
@@ -29,18 +31,18 @@ int main(void){
       while(true){
         GetString(checkStr);
         if(atoi(checkStr) == 0){
-          if(strncmp(checkStr, "quit", 4) == 0){
+          if(strncmp(checkStr, "quit", 4) == 0){ //shut down server
             ServerFunction(listeningSocketNum, buffer, checkStr, &serverTcp);
             break;
           }
-          else if(strncmp(checkStr, "print", 5) == 0){
+          else if(strncmp(checkStr, "print", 5) == 0){ //show connected sockets
             serverTcp.CheckConnectedSocket();
           }
           else{
             printf("Please input socket number correctly(1~MAX)\n");
           }
         }
-        else{
+        else{ //send msg to specific socket
           printf("send msg to %d socket : ", atoi(checkStr));
           GetString(buffer);
           serverTcp.WriteMsg(checkStr ,buffer);
@@ -65,12 +67,12 @@ int main(void){
       }
     }
   }
-  kill(getppid(), SIGINT);
+  kill(getppid(), SIGINT); //Part of "quit" function
   return 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-/*If you want to make function which is executed in client, modify this function*/
+/*If you want to make function which is executed in Server, modify this function*/
 //////////////////////////////////////////////////////////////////////////////////
 void ServerFunction(int socketNum, char* buffer, char* checkStr, Tcp* serverTcp){
   if(strncmp(buffer, "exit", 4) == 0){
@@ -93,16 +95,19 @@ void ServerFunction(int socketNum, char* buffer, char* checkStr, Tcp* serverTcp)
     serverTcp->QuitAll();
     EndProcess(buffer, checkStr, serverTcp);
   }
+  // else if(strncmp(checkStr, "FUNCTION NAME", length(FUNCTION NAME)) == 0){
+  //   DO you want
+  // }
 }
 //////////////////////////////////////////////////////////////////////////////////
 
-void GetString(char* str){
+void GetString(char* str){ //get input buffer
   bzero(str, sizeof(str));
   fflush(stdin);
   fgets(str,sizeof(str),stdin);
 }
 
-void EndProcess(char* buffer, char* checkStr, Tcp* serverTcp){
+void EndProcess(char* buffer, char* checkStr, Tcp* serverTcp){ //release memory and quit server
   delete[] buffer;
   delete[] checkStr;
   serverTcp->QuitTcp();

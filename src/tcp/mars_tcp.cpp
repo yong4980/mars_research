@@ -1,9 +1,11 @@
 #include "mars_tcp.h"
+
 Tcp::Tcp(){
   buffer = new char[1024];
   hostIP = new char[20];
   bzero(buffer, sizeof(buffer));
   bzero(hostIP, sizeof(hostIP));
+
   connectedSocket = new int[MAXSOCKET];
   for(int i=0; i<MAXSOCKET; i++){
     connectedSocket[i] = 0;
@@ -80,7 +82,7 @@ int Tcp::BuildClientTCP(char serverIP[]){
 }
 
 void Tcp::ListeningClient(int newSocketNum){
-  int newSocket = accept(connectedSocket[0], (struct sockaddr*)&newClientAddr, &addr_size);
+  int newSocket = accept(connectedSocket[0], (struct sockaddr*)&newClientAddr, &addr_size); //waiting client socket
   connectedSocket[newSocketNum] = newSocket;
   if(newSocket < 0){
     exit(1);
@@ -88,7 +90,7 @@ void Tcp::ListeningClient(int newSocketNum){
   printf("[+]Connection accepted from %s:%d\n", inet_ntoa(newClientAddr.sin_addr), ntohs(newClientAddr.sin_port));
 }
 
-char* Tcp::ReadMsg(int socket, int mode){
+char* Tcp::ReadMsg(int socket, int mode){ //read msg
   int nbytes;
   bzero(buffer, sizeof(buffer));
   if(mode==SERVER){
@@ -106,7 +108,7 @@ char* Tcp::ReadMsg(int socket, int mode){
 }
 
 
-void Tcp::WriteMsg(int socket, char* msg, int mode){
+void Tcp::WriteMsg(int socket, char* msg, int mode){ //write msg
   if(mode==SERVER){
     write(connectedSocket[socket], msg, 1023);
   }
@@ -115,7 +117,7 @@ void Tcp::WriteMsg(int socket, char* msg, int mode){
   }
 }
 
-void Tcp::WriteMsg(char* socketNumStr, char* msg){
+void Tcp::WriteMsg(char* socketNumStr, char* msg){ //write msg, function overloading
   int socketNum = atoi(socketNumStr);
   if(connectedSocket[socketNum] == 0){
     printf("That socket is not connected\n");
@@ -126,7 +128,7 @@ void Tcp::WriteMsg(char* socketNumStr, char* msg){
 
 }
 
-int Tcp::FindEmptySocket(){
+int Tcp::FindEmptySocket(){ //find empty socket
   for(int i=1; i<MAXSOCKET; i++){
     if(connectedSocket[i] == 0){
       return i;
@@ -135,7 +137,7 @@ int Tcp::FindEmptySocket(){
   return -1; //Full
 }
 
-void Tcp::CheckConnectedSocket(){
+void Tcp::CheckConnectedSocket(){ //show connected sockets
   int cnt = 0;
   printf("Connected Socket num : ");
   for(int i=1; i<MAXSOCKET; i++){
@@ -152,7 +154,7 @@ void Tcp::CheckConnectedSocket(){
   }
 }
 
-void Tcp::QuitTcp(){
+void Tcp::QuitTcp(){ //detach and delete shared memory, release memory
   shmdt(connectedSocket);
   shmctl(shmid,IPC_RMID,NULL);
   delete[] buffer;
@@ -160,7 +162,7 @@ void Tcp::QuitTcp(){
   printf("Complete detach shared memory\n");
 }
 
-void Tcp::QuitAll(){
+void Tcp::QuitAll(){ //terminate connected sockets
   strcpy(buffer, "stop");
   for(int i=1; i<MAXSOCKET; i++){
     if(connectedSocket[i] != 0){
@@ -172,10 +174,10 @@ void Tcp::QuitAll(){
   printf("Disconnect all clients\n");
 }
 
-void Tcp::close(int socketNum){
+void Tcp::close(int socketNum){ //close socket
   close(connectedSocket[socketNum]);
 }
 
-void Tcp::DisconnectSocket(int socketNum){
+void Tcp::DisconnectSocket(int socketNum){ //remove socket information
   connectedSocket[socketNum] = 0;
 }
