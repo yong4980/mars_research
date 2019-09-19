@@ -26,7 +26,7 @@ int main(void){
 	UIClient(serverIP, &inputKey);
 
   //Tcp, Process
-  char* buffer = new char[1024];
+  char* buffer = new char[BUFFERSIZE];
   int clientSocket;
   pid_t childpid;
 	fgets(buffer, sizeof(buffer), stdin); //empty input buffer
@@ -123,5 +123,5 @@ void UIClient(char serverIP[], int *inputKey){ //get information before start cl
 void GetString(char* str){ //get input buffer
   bzero(str, sizeof(str));
   fflush(stdin);
-  fgets(str,sizeof(str),stdin);
+  fgets(str, BUFFERSIZE ,stdin);
 }

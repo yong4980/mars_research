@@ -4,8 +4,8 @@ void GetString(char* str);
 void EndProcess(char* buffer, char* checkStr, Tcp* serverTcp);
 
 int main(void){
-  char* buffer = new char[1024];
-  char* checkStr = new char[1024];
+  char* buffer = new char[BUFFERSIZE];
+  char* checkStr = new char[BUFFERSIZE];
   int listeningSocketNum, newSocketNum;
   pid_t sendpid, recvpid[MAXCLIENT];
 
@@ -104,7 +104,7 @@ void ServerFunction(int socketNum, char* buffer, char* checkStr, Tcp* serverTcp)
 void GetString(char* str){ //get input buffer
   bzero(str, sizeof(str));
   fflush(stdin);
-  fgets(str,sizeof(str),stdin);
+  fgets(str, BUFFERSIZE ,stdin);
 }
 
 void EndProcess(char* buffer, char* checkStr, Tcp* serverTcp){ //release memory and quit server

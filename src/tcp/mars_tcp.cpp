@@ -1,7 +1,7 @@
 #include "mars_tcp.h"
 
 Tcp::Tcp(){
-  buffer = new char[1024];
+  buffer = new char[BUFFERSIZE];
   hostIP = new char[20];
   bzero(buffer, sizeof(buffer));
   bzero(hostIP, sizeof(hostIP));
@@ -95,10 +95,10 @@ char* Tcp::ReadMsg(int socket, int mode){ //read msg
   int nbytes;
   bzero(buffer, sizeof(buffer));
   if(mode==SERVER){
-    nbytes = read(connectedSocket[socket],buffer,1023);
+    nbytes = read(connectedSocket[socket],buffer,BUFFERSIZE);
   }
   else if(mode==CLIENT){
-    nbytes = read(socket,buffer,1023);
+    nbytes = read(socket,buffer,BUFFERSIZE);
   }
 
   if(nbytes < 0){
@@ -111,10 +111,10 @@ char* Tcp::ReadMsg(int socket, int mode){ //read msg
 
 void Tcp::WriteMsg(int socket, char* msg, int mode){ //write msg
   if(mode==SERVER){
-    write(connectedSocket[socket], msg, 1023);
+    write(connectedSocket[socket], msg, BUFFERSIZE);
   }
   else if(mode==CLIENT){
-    write(socket, msg, 1023);
+    write(socket, msg, BUFFERSIZE);
   }
 }
 
@@ -124,7 +124,7 @@ void Tcp::WriteMsg(char* socketNumStr, char* msg){ //write msg, function overloa
     printf("That socket is not connected\n");
   }
   else{
-    write(connectedSocket[socketNum], msg, 1023);
+    write(connectedSocket[socketNum], msg, BUFFERSIZE);
   }
 
 }

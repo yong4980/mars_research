@@ -20,6 +20,7 @@
 #define PORT 5555
 #define MAXCLIENT 30
 #define MAXSOCKET MAXCLIENT+1
+#define BUFFERSIZE 1023
 #define SERVER 0
 #define CLIENT 1
 
