@@ -2,7 +2,7 @@
 
 This code has three part. Server part, Client part, MARS part.  Server can use MARS program on multiple boards. Network protocol used TCP. Int the board, communication between client and MARS used shared memory(IPC).
 
-
+![ov](manual_img/ov.png)
 
 # compiling
 
@@ -89,10 +89,24 @@ Just write a message
 
 # structure
 
+###### server source code
 
+![s1](manual_img/s1.png)
+
+###### Client source code
+
+![s2](manual_img/s2.png)
+
+###### Mars(Test) source cod
+
+![s3](manual_img/s3.png)
+
+###### communication structure
+
+![s4](manual_img/s4.png)
 
 # If you want to add functions..
 
-Server and client Source has each ServerFunction() and ClientFunction(). That function includes many functions. So if you want to add function, you just follow this format.
+Server and client Source has each `ServerFunction()` and `ClientFunction()`. That function includes many functions. So if you want to add function, you just follow this format.
 
 ![iywtaf1](manual_img/iywtaf1.png)
